@@ -1,5 +1,5 @@
 angular.module('users')
-    .factory('User', function(){
+    .factory('NewUser', function(){
         return function(){
             this.name = "";
             this.password = "";
