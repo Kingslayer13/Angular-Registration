@@ -1,6 +1,7 @@
-var mongoose = require('mongoose');
-var express = require('express');
-var app = express();
+var mongoose = require('mongoose'),
+    express = require('express'),
+    app = express(),
+    fs = require('fs');
 
 mongoose.connect('mongodb://localhost/test');
 
@@ -13,18 +14,6 @@ app.get('/users', function(request, response){
         response.send(users);
     });
 });
-
-app.get('/login', function(request, response){
-    var User = require('./models/user');
-    User.find({name: request.query.name, password: request.query.password}).exec(function(err, docs){
-        if(err){
-            response.send(err);
-        }else{
-            response.send(docs);
-        }
-    });
-});
-
 
 app.post('/users', function(request, response){
     var User = require('./models/user');
@@ -42,6 +31,17 @@ app.delete('/users/:id',function(request, response){
         if(err){
             response.send(err);
         }else response.send('Success!');
+    });
+});
+
+app.get('/login', function(request, response){
+    var User = require('./models/user');
+    User.find({name: request.query.name, password: request.query.password}).exec(function(err, docs){
+        if(err){
+            response.send(err);
+        }else{
+            response.send(docs);
+        }
     });
 });
 

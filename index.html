@@ -4,73 +4,16 @@
     <link rel="stylesheet" type="text/css" href="js/lib/semantic-ui/rtl/packaged/css/semantic.css"/>
 </head>
 <body ng-app="users">
-<div class="ui two column grid">
 
-    <div class="column"  ng-controller="RegistrationController">
-        <form class="ui reply form" ng-submit="add(newUser)">
-            <div class="ui fluid form segment">
-                <h3 class="ui header">Registration</h3>
-                <div class="field">
-                    <label>Username</label>
-                    <input placeholder="Username" type="text" ng-model="newUser.name">
-                </div>
-                <div class="field">
-                    <label>Password</label>
-                    <input type="password" ng-model="newUser.password">
-                </div>
-                <button class="ui blue submit button">Add</button>
-            </div>
-        </form>
-    </div>
+<div ng-view>
 
-    <div class="column" ng-controller="LoginController">
-        <div class="ui error form segment">
-            <div class="ui {{message.color}} inverted segment">
-                <div class="header"><h2>{{message.header}}</h2></div>
-                <p>{{message.body}}</p>
-            </div>
-            <form class="ui fluid form segment" ng-submit="login(user)">
-                <h3 class="ui header">Log-in</h3>
-                <div class="field">
-                    <label>Username</label>
-                    <input placeholder="Username" type="text" ng-model="user.name">
-                </div>
-                <div class="field">
-                    <label>Password</label>
-                    <input type="password" ng-model="user.password">
-                </div>
-                <button class="ui blue submit button">Submit</button>
-            </form>
-        </div>
-    </div>
-
-</div>
-
-
-<div class="ui two column grid">
-    <div class="column" ng-controller="UsersController">
-        <table class="ui table segment">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Password</th>
-                    <th>Remove</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-repeat="user in users">
-                    <td>{{ user.name }}</td>
-                    <td>{{ user.password }}</td>
-                    <td><a href="#" ng-click='remove(user)'>Delete</a></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.5/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>
 <script src="js/module/users-module.js"></script>
 <script src="js/module/classes/NewUser.js"></script>
 <script src="js/module/classes/Notification.js"></script>
+
 </body>
 </html>

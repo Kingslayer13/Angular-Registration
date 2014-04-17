@@ -1,4 +1,4 @@
-angular.module('users', [])
+angular.module('users', ['ngRoute'])
     .controller('RegistrationController', function($scope, $http, $rootScope, NewUser){
         var users = $scope.users = [];
 
@@ -15,7 +15,7 @@ angular.module('users', [])
         };
     })
 
-    .controller("LoginController", function($scope, $http, NewUser, Notification){
+    .controller("LoginController", function($scope, $http, $timeout, $location, NewUser, Notification){
         var message = $scope.message = new Notification("Action Forbidden!", "Enter your name and password.", 'red');
 
         $scope.login = function(user){
@@ -34,31 +34,59 @@ angular.module('users', [])
                     $scope.message = message;
                 }else{
                     $scope.message = new Notification("Welcome!", "You're successfully logged!", 'green');
+                    $timeout(function(){
+                        $location.path( "/list" );
+                    }, 1000);
                 }
             })
         };
     })
 
-    .controller("UsersController", function($scope, $rootScope, $http){
-        $rootScope.$on('add', function(){
-            $scope.users = [];
-            $http.get('/users').success(function(data){
-                data.forEach(function(user){
-                    $scope.users.push(user);
-                });
+    .controller("UsersController", function($scope, $timeout, $rootScope, $location, $http){
+        var users = $scope.users = [];
+
+        $scope.message = "Nice to see You!";
+
+        $http.get('/users').success(function(data){
+            data.forEach(function(user){
+                users.push(user);
             });
         });
 
-        $rootScope.$broadcast('add');
-
         $scope.remove = function(user){
             var index =  $scope.users.indexOf(user);
-            $scope.users.splice(index, 1);
+            users.splice(index, 1);
 
             $http.delete('/users/' + user._id).success(function(data){
                 console.log(data);
             });
         };
 
+        $scope.logout = function(){
+            $scope.message = "Good Bye!";
+            $timeout(function(){
+                $location.path( "/" );
+            }, 1000);
+        };
+    })
+
+    .config(function($routeProvider, $locationProvider) {
+        $routeProvider
+            .when('/list', {
+                templateUrl: 'user-list.html',
+                controller: 'UsersController',
+                resolve: {
+                    delay: function($q, $timeout) {
+                        var delay = $q.defer();
+                        $timeout(delay.resolve, 1000);
+                        return delay.promise;
+                    }
+                }
+            })
+            .when('/', {
+                templateUrl: 'main.html'
+            });
+
+        $locationProvider.html5Mode(true);
     })
 ;
