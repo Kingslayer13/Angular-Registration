@@ -1,4 +1,8 @@
 angular.module('users', ['ngRoute'])
+    .controller('MainController', function($location){
+
+    })
+
     .controller('RegistrationController', function($scope, $http, $rootScope, NewUser){
         var users = $scope.users = [];
 
@@ -73,7 +77,7 @@ angular.module('users', ['ngRoute'])
     .config(function($routeProvider, $locationProvider) {
         $routeProvider
             .when('/list', {
-                templateUrl: 'user-list.html',
+                templateUrl: 'views/user-list.html',
                 controller: 'UsersController',
                 resolve: {
                     delay: function($q, $timeout) {
@@ -84,7 +88,7 @@ angular.module('users', ['ngRoute'])
                 }
             })
             .when('/', {
-                templateUrl: 'main.html'
+                templateUrl: 'views/main.html'
             });
 
         $locationProvider.html5Mode(true);

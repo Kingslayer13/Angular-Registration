@@ -8,6 +8,14 @@ mongoose.connect('mongodb://localhost/test');
 app.use(express.static(__dirname));
 app.use(express.bodyParser());
 
+app.set('views', __dirname + '/views');
+app.engine('html', require('ejs').renderFile);
+app.use(express.static( __dirname + '/' ));
+
+app.get('/', function(request, response){
+    response.render('index.html');
+});
+
 app.get('/users', function(request, response){
     var User = require('./models/user');
     User.find().exec(function(err, users){
@@ -45,5 +53,9 @@ app.get('/login', function(request, response){
     });
 });
 
-app.listen(3000);
+app.get('/list', function(request, response){
+    response.render('index.html');
+});
 
+
+app.listen(3000);
