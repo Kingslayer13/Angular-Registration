@@ -24,13 +24,21 @@ app.get('/users', function(request, response){
 });
 
 app.post('/users', function(request, response){
-    var User = require('./models/user');
-    var user = new User(request.body);
-    user.save(function(err){
-        if(err){
-            response.send(err);
-        }else response.send(user);
+    var User = require('./models/user'),
+        newUser;
+
+    User.find(request.body).exec(function(err, user){
+        if(user.length == 0){
+            newUser = new User(request.body);
+            newUser.save(function(err){
+                if(err) return response.send(err);
+                return response.send(user);
+            });
+        }else{
+            response.send(undefined);
+        }
     });
+
 });
 
 app.delete('/users/:id',function(request, response){

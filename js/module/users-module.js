@@ -3,8 +3,10 @@ angular.module('users', ['ngRoute'])
 
     })
 
-    .controller('RegistrationController', function($scope, $http, $rootScope, NewUser){
+    .controller('RegistrationController', function($scope, $http, $rootScope, Notification, NewUser){
         var users = $scope.users = [];
+
+        $scope.message = new Notification("Hello!", "Please, enter your name and password.", 'blue');
 
         $scope.newComment = new NewUser();
 
@@ -13,14 +15,17 @@ angular.module('users', ['ngRoute'])
             //console.log(users);
             $scope.newUser = new NewUser();
             $http.post('/users', user).success(function(result){
-                $rootScope.$broadcast('add');
-                console.log(result);
+                if(result){
+                    $scope.message = new Notification("Thank you for registration!", "Now you can enter the site.", 'green');
+                }else{
+                    $scope.message = new Notification("User with same name is already exist!", "Please, enter any other name.", 'red');
+                }
             });
         };
     })
 
     .controller("LoginController", function($scope, $http, $timeout, $location, NewUser, Notification){
-        var message = $scope.message = new Notification("Action Forbidden!", "Enter your name and password.", 'red');
+        var message = $scope.message = new Notification("Enter your login and password", "if you already register.", 'blue');
 
         $scope.login = function(user){
             $http({
@@ -35,7 +40,7 @@ angular.module('users', ['ngRoute'])
                 }
             }).success(function(data){
                 if(data.length == 0){
-                    $scope.message = message;
+                    $scope.message = new Notification("Action Forbidden!", "Enter your name and password.", 'red');
                 }else{
                     $scope.message = new Notification("Welcome!", "You're successfully logged!", 'green');
                     $timeout(function(){

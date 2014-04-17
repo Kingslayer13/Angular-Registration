@@ -3,6 +3,10 @@
     <div class="column"  ng-controller="RegistrationController">
         <form class="ui reply form" ng-submit="add(newUser)">
             <div class="ui fluid form segment">
+                <div class="ui {{message.color}} inverted segment">
+                    <div class="header"><h2>{{message.header}}</h2></div>
+                    <p><h4>{{message.body}}</h4></p>
+                </div>
                 <h3 class="ui header">Registration</h3>
                 <div class="field">
                     <label>Username</label>
@@ -21,7 +25,7 @@
         <div class="ui error form segment">
             <div class="ui {{message.color}} inverted segment">
                 <div class="header"><h2>{{message.header}}</h2></div>
-                <p>{{message.body}}</p>
+                <p><h4>{{message.body}}</h4></p>
             </div>
             <form class="ui fluid form segment" ng-submit="login(user)">
                 <h3 class="ui header">Log-in</h3>
