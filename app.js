@@ -27,7 +27,7 @@ app.post('/users', function(request, response){
     var User = require('./models/user'),
         newUser;
 
-    User.find(request.body).exec(function(err, user){
+    User.find( {name: request.body.name} ).exec(function(err, user){
         if(user.length == 0){
             newUser = new User(request.body);
             newUser.save(function(err){
