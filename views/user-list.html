@@ -1,13 +1,18 @@
 <div class="column" ng-controller="UsersController">
     <div class="ui blue inverted segment">
-        <div class="header"><h2>{{message}}</h2></div>
+        <div class="header"><h2>{{message}}{{userName}}</h2></div>
     </div>
-    <button class="ui green submit button" ng-click="logout()">LogOut</button>
+    <div class="ui buttons">
+        <button class="ui blue submit button" ng-click="toggleEdit()">Edit Users</button>
+        <div class="or"></div>
+        <button class="ui submit positive button" ng-click="logout()">LogOut</button>
+    </div>
     <table class="ui table segment">
         <thead>
         <tr>
             <th>Name</th>
             <th>Password</th>
+            <th>Edit name</th>
             <th>Remove</th>
         </tr>
         </thead>
@@ -15,6 +20,13 @@
         <tr ng-repeat="user in users">
             <td>{{ user.name }}</td>
             <td>{{ user.password }}</td>
+            <td>
+                <div ng-show="editable">
+                    <input type="text" placeholder="Username" ng-model="changedUser.name"/>
+                    <input type="text" placeholder="Password" ng-model="changedUser.password"/>
+                    <button ng-click="change(user, changedUser)" class="mini ui button">Change</button>
+                </div>
+            </td>
             <td><a href="#" ng-click='remove(user)'>Delete</a></td>
         </tr>
         </tbody>

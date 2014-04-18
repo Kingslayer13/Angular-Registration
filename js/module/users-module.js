@@ -1,8 +1,4 @@
 angular.module('users', ['ngRoute'])
-    .controller('MainController', function($location){
-
-    })
-
     .controller('RegistrationController', function($scope, $http, $rootScope, Notification, NewUser){
         var users = $scope.users = [];
 
@@ -12,7 +8,6 @@ angular.module('users', ['ngRoute'])
 
         $scope.add = function(user){
             users.push(user);
-            //console.log(users);
             $scope.newUser = new NewUser();
             $http.post('/users', user).success(function(result){
                 if(result){
@@ -24,7 +19,7 @@ angular.module('users', ['ngRoute'])
         };
     })
 
-    .controller("LoginController", function($scope, $http, $timeout, $location, NewUser, Notification){
+    .controller("LoginController", function($scope, $http, $rootScope, $timeout, $location, NewUser, Notification){
         var message = $scope.message = new Notification("Enter your login and password", "if you already register.", 'blue');
 
         $scope.login = function(user){
@@ -44,23 +39,48 @@ angular.module('users', ['ngRoute'])
                 }else{
                     $scope.message = new Notification("Welcome!", "You're successfully logged!", 'green');
                     $timeout(function(){
+                        $rootScope.currentUser = data;
                         $location.path( "/list" );
                     }, 1000);
                 }
-            })
+            });
         };
     })
 
     .controller("UsersController", function($scope, $timeout, $rootScope, $location, $http){
-        var users = $scope.users = [];
+        var users = $scope.users = [],
+            getter = function(){
+                $http.get('/users').success(function(data){
+                    data.forEach(function(user){
+                        users.push(user);
+                    });
+                });
+            };
 
-        $scope.message = "Nice to see You!";
+        if( ! $rootScope.currentUser) return $location.path( "/" );
 
-        $http.get('/users').success(function(data){
-            data.forEach(function(user){
-                users.push(user);
+        getter();
+
+        $scope.editable = false;
+
+        $scope.userName = $rootScope.currentUser[0].name;
+
+        $scope.message = "Nice to see You, ";
+
+        $scope.change = function(user, changedUser){
+            changedUser._id = user._id;
+
+            $http.post("/change", changedUser).success(function(newUser){
+                if(newUser) user = newUser;
+                users = $scope.users = [];
+                getter();
+                $scope.toggleEdit();
             });
-        });
+        };
+
+        $scope.toggleEdit = function(){
+            $scope.editable = $scope.editable === false ? true: false;
+        };
 
         $scope.remove = function(user){
             var index =  $scope.users.indexOf(user);
@@ -72,8 +92,9 @@ angular.module('users', ['ngRoute'])
         };
 
         $scope.logout = function(){
-            $scope.message = "Good Bye!";
+            $scope.message = "Good Bye, ";
             $timeout(function(){
+                $rootScope.currentUser = undefined;
                 $location.path( "/" );
             }, 1000);
         };

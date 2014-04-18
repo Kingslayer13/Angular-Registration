@@ -65,5 +65,23 @@ app.get('/list', function(request, response){
     response.render('index.html');
 });
 
+app.post('/change', function(request, response){
+    var User = require('./models/user');
+
+    User.find(mongoose.Types.ObjectId( request.body._id )).exec(function(err, user){
+        if(user.length !== 0){
+            user[0].name = request.body.name;
+            user[0].password = request.body.password;
+
+            user[0].save(function(err){
+                if(err) return response.send(undefined);
+                return response.send(user);
+            });
+
+        }else{
+            response.send(undefined);
+        }
+    });
+});
 
 app.listen(3000);

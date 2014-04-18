@@ -1,7 +1,7 @@
 <div class="ui two column grid">
 
     <div class="column"  ng-controller="RegistrationController">
-        <form class="ui reply form" ng-submit="add(newUser)">
+        <form name="MyForm" class="ui reply form" ng-submit="add(newUser)">
             <div class="ui fluid form segment">
                 <div class="ui {{message.color}} inverted segment">
                     <div class="header"><h2>{{message.header}}</h2></div>
@@ -10,11 +10,17 @@
                 <h3 class="ui header">Registration</h3>
                 <div class="field">
                     <label>Username</label>
-                    <input placeholder="Username" type="text" ng-model="newUser.name">
+                    <input type="text" name="username" placeholder="Username" ng-model="newUser.name" ng-minlength="3" ng-maxlength="10" required>
+                      <div class="ui label error" ng-show="MyForm.username.$error.minlength || MyForm.username.$error.maxlength">
+                            Name must be at least 3 and maximum 10 symbols!
+                      </div>
                 </div>
                 <div class="field">
                     <label>Password</label>
-                    <input type="password" ng-model="newUser.password">
+                    <input type="password" name="userPass" placeholder="Password" ng-model="newUser.password" ng-minlength="4" ng-maxlength="10" required>
+                    <div class="ui label error" ng-show="MyForm.userPass.$error.minlength || MyForm.userPass.$error.maxlength">
+                        Password must be at least 4 and maximum 10 symbols!
+                    </div>
                 </div>
                 <button class="ui blue submit button">Add</button>
             </div>
@@ -27,15 +33,15 @@
                 <div class="header"><h2>{{message.header}}</h2></div>
                 <p><h4>{{message.body}}</h4></p>
             </div>
-            <form class="ui fluid form segment" ng-submit="login(user)">
+            <form name="loginForm" class="ui fluid form segment" ng-submit="login(user)">
                 <h3 class="ui header">Log-in</h3>
                 <div class="field">
                     <label>Username</label>
-                    <input placeholder="Username" type="text" ng-model="user.name">
+                    <input type="text" placeholder="Username" name="username" ng-model="user.name" required>
                 </div>
                 <div class="field">
                     <label>Password</label>
-                    <input type="password" ng-model="user.password">
+                    <input type="password" placeholder="Password" name="userPass" ng-model="user.password" required>
                 </div>
                 <button class="ui blue submit button">Submit</button>
             </form>
