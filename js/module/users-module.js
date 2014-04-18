@@ -68,6 +68,9 @@ angular.module('users', ['ngRoute'])
         $scope.message = "Nice to see You, ";
 
         $scope.change = function(user, changedUser){
+            changedUser.name = changedUser.name === undefined ? user.name : changedUser.name;
+            changedUser.password = changedUser.password === undefined ? user.password : changedUser.password;
+
             changedUser._id = user._id;
 
             $http.post("/change", changedUser).success(function(newUser){
